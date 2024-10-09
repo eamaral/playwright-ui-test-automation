@@ -1,0 +1,44 @@
+name: Playwright UI Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Faz o checkout do repositório
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Configura Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      # Instala as dependências do projeto
+      - name: Install dependencies
+        run: npm install
+
+      # Instala os navegadores necessários para o Playwright
+      - name: Install Playwright Browsers
+        run: npx playwright install
+
+      # Executa os testes de UI e gera o relatório HTML
+      - name: Run Playwright Tests
+        run: npx playwright test --headed  # Executa os testes com o navegador visível
+
+      # Publica o conteúdo do diretório 'playwright-report' no GitHub Pages
+      - name: Deploy report to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: playwright-report  # Publica o diretório onde o 'index.html' do relatório está
+          keep_files: false  # Remove qualquer arquivo existente na branch gh-pages para evitar conflitos
