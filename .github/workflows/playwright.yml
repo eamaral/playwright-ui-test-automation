@@ -31,14 +31,14 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install
 
-      # Executa os testes de UI e gera o relatório HTML
+      # Executa os testes de UI no modo headless
       - name: Run Playwright Tests
-        run: npx playwright test --headed  # Executa os testes com o navegador visível
+        run: npx playwright test  # Remove a opção --headed
 
       # Publica o conteúdo do diretório 'playwright-report' no GitHub Pages
       - name: Deploy report to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: playwright-report  # Publica o diretório onde o 'index.html' do relatório está
-          keep_files: false  # Remove qualquer arquivo existente na branch gh-pages para evitar conflitos
+          publish_dir: playwright-report
+          keep_files: false
